@@ -6,38 +6,43 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/json-stream-rs-tokenizer-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: bfeab43c69386a8f78447a7e61951a06a5e434d1f0ee5165b90e725d5f4bc380
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   number: 0
 
 requirements:
   host:
-    - python >=3.7,<4.0
+    - python
     - setuptools
     - wheel
-    - setuptools-rust >=1,<2
+    - setuptools-rust 1.5.2
     - pip
   run:
-    - python >=3.7,<4.0
+    - python
 
 test:
   imports:
     - json_stream_rs_tokenizer
-  commands:
-    - pip check
   requires:
     - pip
+  commands:
+    - pip check
 
 about:
-  summary: A faster tokenizer for the json-stream Python library
   home: https://github.com/smheidrich/py-json-stream-rs-tokenizer
+  dev_url: https://github.com/smheidrich/py-json-stream-rs-tokenizer
+  doc_url: https://github.com/smheidrich/py-json-stream-rs-tokenizer/tree/v0.4.22#usage
+  summary: A faster tokenizer for the json-stream Python library
+  description: |
+    A faster tokenizer for the json-stream Python library.
+    It's actually just json-stream's own tokenizer (itself adapted from the NAYA project) ported to Rust almost verbatim and made available as a Python module using PyO3.
+    On my machine, it speeds up parsing by a factor of 4–10, depending on the nature of the data.
   license: MIT
+  license_family: MIT
   license_file: LICENSE
-
 extra:
   recipe-maintainers:
     - rxm7706

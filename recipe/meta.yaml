@@ -6,8 +6,13 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: bfeab43c69386a8f78447a7e61951a06a5e434d1f0ee5165b90e725d5f4bc380
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: bfeab43c69386a8f78447a7e61951a06a5e434d1f0ee5165b90e725d5f4bc380
+  # in the v0.4.22 and v0.4.23 tarballs, they forgot to add the conftest.py file
+  # check again for the next versions and eventually remove this (needed for upstream tests)
+  - url: https://raw.githubusercontent.com/smheidrich/py-json-stream-rs-tokenizer/v0.4.22/tests/conftest.py
+    sha256: 3429eff38d3c8b6d76121eea781977f420c8e58db3280ea6c871fcb56be676c8
+    folder: tests
 
 build:
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
@@ -16,6 +21,7 @@ build:
 requirements:
   build:
     - {{ compiler("rust") }}
+    - {{ compiler("c") }}     # [s390x]
     - {{ compiler("cxx") }}   # [linux]
   host:
     - python
@@ -27,12 +33,17 @@ requirements:
     - python
 
 test:
-  imports:
-    - json_stream_rs_tokenizer
   requires:
     - pip
+    - pytest
+  source_files:
+    - tests
   commands:
     - pip check
+    # install requirements for tests as specified in the upstream
+    - pip install "json-stream-rs-tokenizer[test]"
+    # run upstream tests
+    - pytest -v tests 
 
 about:
   home: https://github.com/smheidrich/py-json-stream-rs-tokenizer
@@ -49,3 +60,4 @@ about:
 extra:
   recipe-maintainers:
     - rxm7706
+    - lorepirri

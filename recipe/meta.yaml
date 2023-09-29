@@ -14,6 +14,9 @@ build:
   number: 1
 
 requirements:
+  build:
+    - {{ compiler("rust") }}
+    - {{ compiler("cxx") }}   # [linux]
   host:
     - python
     - setuptools

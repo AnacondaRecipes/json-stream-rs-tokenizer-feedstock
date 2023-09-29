@@ -21,7 +21,6 @@ build:
 requirements:
   build:
     - {{ compiler("rust") }}
-    - {{ compiler("c") }}     # [s390x]
     - {{ compiler("cxx") }}   # [linux]
   host:
     - python

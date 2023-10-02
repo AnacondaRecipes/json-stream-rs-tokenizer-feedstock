@@ -43,7 +43,9 @@ test:
   commands:
     - pip check
     # run upstream tests, except benchmark ones
-    - pytest -k 'not test_via_benchmark'
+    - rm tests/test_via_benchmark.py   # [not win]
+    - del tests\test_via_benchmark.py  # [win]
+    - pytest -v tests 
 
 about:
   home: https://github.com/smheidrich/py-json-stream-rs-tokenizer

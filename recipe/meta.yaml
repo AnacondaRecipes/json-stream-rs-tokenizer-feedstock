@@ -28,7 +28,7 @@ requirements:
     - python
     - setuptools
     - wheel
-    - setuptools-rust 1.5.2
+    - setuptools-rust >=1,<2
     - pip
   run:
     - python
@@ -36,14 +36,15 @@ requirements:
 test:
   requires:
     - pip
-    - pytest
+    - pytest >7.1,<8
+    - json_stream 2.3.2
   source_files:
     - tests
   commands:
     - pip check
-    # install requirements for tests as specified in the upstream
-    - pip install "json-stream-rs-tokenizer[test]"
-    # run upstream tests
+    # run upstream tests, except benchmark ones
+    - rm tests/test_via_benchmark.py   # [not win]
+    - del tests\test_via_benchmark.py  # [win]
     - pytest -v tests 
 
 about:

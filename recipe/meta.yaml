@@ -34,6 +34,17 @@ requirements:
   run:
     - python
 
+# Skipping tests that require json_stream 2.3.2 (cyclic dependency)
+{% set tests_to_skip = "test_overconsumption_load_ends_at_doc_end" %}
+
+# Ignore tests modules that require json_stream 2.3.2 (cyclic dependency)
+{% set tests_to_ignore = "--ignore=tests/test_via_benchmark.py" %}
+{% set tests_to_ignore = tests_to_ignore + " --ignore=tests/test_using_json_stream_tokenizer_tests.py" %}
+{% set tests_to_ignore = tests_to_ignore + " --ignore=tests/test_exceptions.py" %}
+{% set tests_to_ignore = tests_to_ignore + " --ignore=tests/test_integers.py" %}
+{% set tests_to_ignore = tests_to_ignore + " --ignore=tests/test_large_integers.py" %}
+{% set tests_to_ignore = tests_to_ignore + " --ignore=tests/test_unicode_surrogate_pairs.py" %}
+
 test:
   requires:
     - pip
@@ -44,7 +55,7 @@ test:
     - pip check
     # run upstream tests, except benchmark ones, and the ones
     # that require json_stream 2.3.2 (cyclic dependency)
-    - pytest -v tests --ignore=tests/test_via_benchmark.py --ignore=tests/test_using_json_stream_tokenizer_tests.py
+    - pytest -v tests -k "not ({{ tests_to_skip }})" {{ tests_to_ignore }}
 
 about:
   home: https://github.com/smheidrich/py-json-stream-rs-tokenizer

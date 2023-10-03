@@ -44,7 +44,7 @@ test:
     - pip check
     # run upstream tests, except benchmark ones, and the ones
     # that require json_stream 2.3.2 (cyclic dependency)
-    - pytest -v tests --ignore=tests/test_via_benchmark.py --ignore=test_using_json_stream_tokenizer_tests.py
+    - pytest -v tests --ignore=tests/test_via_benchmark.py --ignore=tests/test_using_json_stream_tokenizer_tests.py
 
 about:
   home: https://github.com/smheidrich/py-json-stream-rs-tokenizer

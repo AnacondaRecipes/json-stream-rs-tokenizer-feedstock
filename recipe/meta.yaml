@@ -46,6 +46,8 @@ requirements:
 {% set tests_to_ignore = tests_to_ignore + " --ignore=tests/test_unicode_surrogate_pairs.py" %}
 
 test:
+  imports:
+    - json_stream_rs_tokenizer
   requires:
     - pip
     - pytest >7.1,<8
@@ -53,6 +55,10 @@ test:
     - tests
   commands:
     - pip check
+    # this test is very important to detect if the rust
+    # package was built correctly (the rust toolchain must
+    # be present). See https://github.com/AnacondaRecipes/json-stream-rs-tokenizer-feedstock/pull/2
+    - python -c "import json_stream_rs_tokenizer; print('json_stream_rs_tokenizer.rust_tokenizer_or_raise()'); json_stream_rs_tokenizer.rust_tokenizer_or_raise()"
     # run upstream tests, except benchmark ones, and the ones
     # that require json_stream 2.3.2 (cyclic dependency)
     - pytest -v tests -k "not ({{ tests_to_skip }})" {{ tests_to_ignore }}

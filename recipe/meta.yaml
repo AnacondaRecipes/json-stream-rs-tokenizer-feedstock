@@ -38,13 +38,13 @@ test:
   requires:
     - pip
     - pytest >7.1,<8
-    - json_stream 2.3.2
   source_files:
     - tests
   commands:
     - pip check
-    # run upstream tests, except benchmark ones
-    - pytest -v tests --ignore=tests/test_via_benchmark.py
+    # run upstream tests, except benchmark ones, and the ones
+    # that requires json_stream 2.3.2 (cyclic dependency)
+    - pytest -v tests --ignore=tests/test_via_benchmark.py --ignore=test_using_json_stream_tokenizer_tests.py
 
 about:
   home: https://github.com/smheidrich/py-json-stream-rs-tokenizer
